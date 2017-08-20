@@ -180,7 +180,7 @@ function register_user($first_name, $last_name, $username, $email, $password) {
         // send email activation code
         $subject = "Activate Account";
         $msg = "Please click the link below to activate your account
-         http://localhost/login/activate.php?email=$email&code=$validation_code
+         http://localhost/loginphp/activate.php?email=$email&code=$validation_code
         ";
         $header = "From: noreply@yourwebsite.com";
         
@@ -242,6 +242,7 @@ function validate_user_login() {
 
         $email      = clean($_POST['email']);
         $password   = clean($_POST['password']);
+        $remember   = isset($_POST['remember']);
 
     if(empty($email)) {
         $errors[] = "Email field cannot be empty";
@@ -252,14 +253,15 @@ function validate_user_login() {
     }    
         
     if(!empty($errors)) {
-            foreach($errors as $error) {
-            echo validation_errors($error);
-                
+        
+        foreach($errors as $error) {
+        echo validation_errors($error);
+
             }
         
         } else {    
             
-            if(login_user($email, $password)) {
+            if(login_user($email, $password, $remember)) {
                 
                 redirect("admin.php");
                 
@@ -279,7 +281,7 @@ function validate_user_login() {
 
 
 
-function login_user($email, $password) {
+function login_user($email, $password, $remember) {
     
     $sql = "SELECT password, id FROM users WHERE email = '".escape($email)."'";
     $result = query($sql);
@@ -292,15 +294,39 @@ function login_user($email, $password) {
         
         if(password_hash($password) === $db_password); {
             
+            if($remember == "on") {
+                
+                setcookie('email', $email, time() + 60);
+                
+            }
+            
+            
+            
+            $_SESSION['email'] = $email;
+            
             return true;
         
+        } 
     } else {
         
             return false;
         
         }
-    }
+} //end function
+
+
+
+//***************************** Logged-In Functions *****************************
+
+
+function logged_in() {
+    if(isset($_SESSION['email']) || isset($_COOKIE['email'])) {
+        return true;
+    } else 
+        return false;
 }
+
+
 
 
 

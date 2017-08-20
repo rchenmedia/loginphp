@@ -9,7 +9,9 @@
 
 	    <?php display_message(); ?>
                             
-        <?php validate_user_login(); ?>                  
+        <?php validate_user_login(); ?>       
+        
+               
 								
 		</div>
 	</div>
