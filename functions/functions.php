@@ -296,7 +296,7 @@ function login_user($email, $password, $remember) {
             
             if($remember == "on") {
                 
-                setcookie('email', $email, time() + 60);
+                setcookie('email', $email, time() + 86400);
                 
             }
             
@@ -324,6 +324,20 @@ function logged_in() {
         return true;
     } else 
         return false;
+}
+
+
+
+
+//***************************** Recover Functions *****************************
+
+
+function recover_password() {
+    
+        if($_SERVER['REQUEST_METHOD'] == "POST") {
+            
+                
+        }
 }
 
 
